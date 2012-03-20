@@ -20,19 +20,19 @@ task :all => ['build:all']
 namespace :install do
   desc "Installs for Adium on Mac OS X"
   task :adium do
-    sh "open build/trollicons.AdiumEmoticonset"
+    sh "open build/maltafixe.AdiumEmoticonset"
     puts "Restart Adium".red
   end
   
   desc "Installs in iChat.app, requires root"
   task :ichat do
-    sh "sudo cp -R ./build/-trollicons-ichat/ /Applications/iChat.app/Contents/PlugIns/Standard.smileypack/Contents/Resources/"
+    sh "sudo cp -R ./build/-maltafixe-ichat/ /Applications/iChat.app/Contents/PlugIns/Standard.smileypack/Contents/Resources/"
     puts "Restart iChat".red
   end
   
   desc "Installs for Colloquy on Mac OS X"
   task :colloquy do
-    sh "cp -R ./build/trollicons.colloquyEmoticons ~/Library/Application\\ Support/Colloquy/Emoticons/"
+    sh "cp -R ./build/maltafixe.colloquyEmoticons ~/Library/Application\\ Support/Colloquy/Emoticons/"
     puts "Restart Colloquy".red
   end
 end
@@ -76,8 +76,8 @@ namespace :build do
       }
     end
   
-    ri.dump_icons_to_folder('trollicons.AdiumEmoticonset')
-    Pathname.new('./build/trollicons.AdiumEmoticonset/Emoticons.plist').open('w'){|io| io << markup}
+    ri.dump_icons_to_folder('maltafixe.AdiumEmoticonset')
+    Pathname.new('./build/maltafixe.AdiumEmoticonset/Emoticons.plist').open('w'){|io| io << markup}
   end
   
   desc "Builds for Colloquy"
@@ -97,13 +97,13 @@ namespace :build do
         b.key "CFBundleDevelopmentRegion"
         b.string "English"
         b.key "CFBundleGetInfoString"
-        b.string "Trollicons Colloquy Chat Emoticons"
+        b.string "maltafixe Colloquy Chat Emoticons"
         b.key "CFBundleIdentifier"
-        b.string "cc.javelin.colloquy.emoticons.trollicons"
+        b.string "cc.javelin.colloquy.emoticons.maltafixe"
         b.key "CFBundleInfoDictionaryVersion"
         b.string "6.0"
         b.key "CFBundleName"
-        b.string "Trollicons"
+        b.string "maltafixe"
         b.key "CFBundlePackageType"
         b.string "coEm"
       }
@@ -128,7 +128,7 @@ namespace :build do
         end
       }
     end
-    
+
     #Colloquy uses an XML file emoticons.plist
     b = Builder::XmlMarkup.new(:target=>(emoticonsmarkup=String.new), :indent=>2)
     b.comment! "Auto-generated. Run rake build:colloquy."
@@ -152,11 +152,11 @@ namespace :build do
       css += ".emoticon." + r.aliases.first + ":after { content: url( \"" + r.cleanpath + "\" ); }\n"
     end
   
-    ri.dump_icons_to_folder('trollicons.colloquyEmoticons/Contents/Resources')
-    Pathname.new('./build/trollicons.colloquyEmoticons/Contents/Info.plist').open('w'){|io| io << infomarkup}
-    Pathname.new('./build/trollicons.colloquyEmoticons/Contents/Resources/menu.plist').open('w'){|io| io << menumarkup}
-    Pathname.new('./build/trollicons.colloquyEmoticons/Contents/Resources/emoticons.plist').open('w'){|io| io << emoticonsmarkup}
-    Pathname.new('./build/trollicons.colloquyEmoticons/Contents/Resources/emoticons.css').open('w'){|io| io << css}
+    ri.dump_icons_to_folder('maltafixe.colloquyEmoticons/Contents/Resources')
+    Pathname.new('./build/maltafixe.colloquyEmoticons/Contents/Info.plist').open('w'){|io| io << infomarkup}
+    Pathname.new('./build/maltafixe.colloquyEmoticons/Contents/Resources/menu.plist').open('w'){|io| io << menumarkup}
+    Pathname.new('./build/maltafixe.colloquyEmoticons/Contents/Resources/emoticons.plist').open('w'){|io| io << emoticonsmarkup}
+    Pathname.new('./build/maltafixe.colloquyEmoticons/Contents/Resources/emoticons.css').open('w'){|io| io << css}
   end
   
   desc "Builds for iChat"
@@ -188,35 +188,35 @@ namespace :build do
               b.key "Description"
               b.string r.name
               b.key "Speech Description"
-              b.string "Trollicon #{r.name}"
+              b.string "MaltaFixe #{r.name}"
             }
           end
         }
       }
     end
   
-    ri.dump_icons_to_folder('-trollicons-ichat')    
-    mkdir_p './build/-trollicons-ichat/English.lproj'
-    Pathname.new('./build/-trollicons-ichat/English.lproj/Smileys.plist').open('w'){|io| io << markup}
+    ri.dump_icons_to_folder('-maltafixe-ichat')    
+    mkdir_p './build/-maltafixe-ichat/English.lproj'
+    Pathname.new('./build/-maltafixe-ichat/English.lproj/Smileys.plist').open('w'){|io| io << markup}
     
     # Make a .pkg file
     puts "Making a pkg installer".bold
     cmd = "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker "
-    cmd += "--root ./build/-trollicons-ichat "
-    cmd += "--out ./build/trollicons-ichat.pkg "
+    cmd += "--root ./build/-maltafixe-ichat "
+    cmd += "--out ./build/maltafixe-ichat.pkg "
     cmd += "--install-to /Applications/iChat.app/Contents/PlugIns/Standard.smileypack/Contents/Resources "
-    cmd += "--id com.sagargp.trollicons "
-    cmd += "--title \"Trollicons for iChat\""
+    cmd += "--id com.sagargp.maltafixe "
+    cmd += "--title \"maltafixe for iChat\""
     sh cmd
     
     # Distribute the uninstaller
     puts "Creating uninstaller".bold
     cmd = "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker "
     cmd += "--root ./iChat-uninstaller/Resources "
-    cmd += "--out ./build/trollicons-ichat-uninstaller.pkg "
+    cmd += "--out ./build/maltafixe-ichat-uninstaller.pkg "
     cmd += "--install-to /Applications/iChat.app/Contents/PlugIns/Standard.smileypack/Contents/Resources "
-    cmd += "--id com.sagargp.trollicons-uninstaller "
-    cmd += "--title \"Uninstall Trollicons for iChat\""
+    cmd += "--id com.sagargp.maltafixe-uninstaller "
+    cmd += "--title \"Uninstall maltafixe for iChat\""
     sh cmd
   end
 
@@ -230,12 +230,12 @@ namespace :build do
     iconStr += "#  Created by Sagar Pandya (sagargp@gmail.com)  #\n"
     iconStr += "#  www.reddit.com/user/sagarp                   #\n"
     iconStr += "#  www.reddit.com/r/fffffffuuuuuuuuuuuu         #\n"
-    iconStr += "##  See https://github.com/sagargp/trollicons  ##\n"
+    iconStr += "##  See https://github.com/sagargp/maltafixe  ##\n"
     iconStr += "#################################################\n"
 
-    iconStr += "Name=Trollicons\n"
+    iconStr += "Name=maltafixe\n"
     iconStr += "Description=An iconset made out of rage faces from reddit.com's F7U12 sub\n"
-    iconStr += "Icon=Happy-SoMuchWin.png\n"
+    iconStr += "Icon=User-user.png\n"
     iconStr += "Author=Sagar Pandya\n\n"
     iconStr += "[default]\n";
   
@@ -244,31 +244,31 @@ namespace :build do
     end
   
     #Write
-    ri.dump_icons_to_folder('trollicons-pidgin')
-    Pathname.new('build/trollicons-pidgin/theme').open('w'){|io| io << iconStr}
+    ri.dump_icons_to_folder('maltafixe-pidgin')
+    Pathname.new('build/maltafixe-pidgin/theme').open('w'){|io| io << iconStr}
   end
 
   desc "Builds for Digsby"
   task :digsby do
     puts "\nBuilding for Adium".bold
   
-    list = "trollicons\n"
+    list = "maltafixe\n"
     ri = RIcons.new.each_emoticon do |r|
       r.aliases.each do |a|
         list += "#{r.cleanpath} [#{a}]\n"
       end
     end
   
-    ri.dump_icons_to_folder('trollicons-digsby')
-    Pathname.new('build/trollicons-digsby/emoticons.txt').open('w'){|io| io << list}
+    ri.dump_icons_to_folder('maltafixe-digsby')
+    Pathname.new('build/maltafixe-digsby/emoticons.txt').open('w'){|io| io << list}
   end
 
   desc "Builds for Miranda"
   task :miranda do
     puts "\nBuilding for Miranda".bold
   
-    string = "Name=\"Trollicons\"\r\n"
-    string += "Description=\"This is the trollicons pack for Miranda. Find it on github.\"\r\n"
+    string = "Name=\"maltafixe\"\r\n"
+    string += "Description=\"This is the maltafixe pack for Miranda. Find it on github.\"\r\n"
     string += "Icon=\"Happy-SoMuchWin.png\"\r\n"
     string += "Author=\"Sagar Pandya\"\r\n\r\n"
     string += "[default]\r\n"
@@ -277,8 +277,8 @@ namespace :build do
       string += "Smiley = \"#{r.cleanpath}\", 0, \"#{r.aliases.collect{|a| "[#{a}]"}.join(' ')}\"\r\n"
     end
   
-    ri.dump_icons_to_folder('trollicons-miranda')
-    Pathname.new('build/trollicons-miranda/Trollicons.msl').open('w'){|io| io << string}
+    ri.dump_icons_to_folder('maltafixe-miranda')
+    Pathname.new('build/maltafixe-miranda/maltafixe.msl').open('w'){|io| io << string}
   end
 
   desc "Builds for Trillian"
@@ -291,9 +291,9 @@ namespace :build do
     
     #Trillian uses an XML file
     b = Builder::XmlMarkup.new(:target=>(markup=String.new), :indent=>2)
-    b.comment! "Auto-generated. Run rake build:trillian. github.com/sagargp/trollicons"
+    b.comment! "Auto-generated. Run rake build:trillian. github.com/sagargp/maltafixe"
     ri.each_emoticon do |r|
-      b.bitmap :name => r.name, :file => "../../stixe/plugins/trollicons-trillian/icons/#{r.cleanpath}"
+      b.bitmap :name => r.name, :file => "../../stixe/plugins/maltafixe-trillian/icons/#{r.cleanpath}"
     end
   
     b.prefs{
@@ -326,18 +326,18 @@ namespace :build do
     }
   
     # It also uses a desc.txt file
-    string = "Trollicons emoticon set built on #{Time.now}\nemot"
+    string = "maltafixe emoticon set built on #{Time.now}\nemot"
   
-    ri.dump_icons_to_folder('trollicons-trillian/icons')
+    ri.dump_icons_to_folder('maltafixe-trillian/icons')
     #binding.pry
-    cp ri.files.select{|f| f.aliases.include? 'trollicons'}.first.to_s, "build/trollicons-trillian/emoticon.png" # Header image
-    cp ri.files.select{|f| f.aliases.include? 'win'}.first.to_s, "build/trollicons-trillian/preview.png" # Header image
-    preview = Magick::Image.read("build/trollicons-trillian/preview.png")
-    preview[0].write("build/trollicons-trillian/preview.bmp")
-    rm "build/trollicons-trillian/preview.png"
+    cp ri.files.select{|f| f.aliases.include? 'maltafixe'}.first.to_s, "build/maltafixe-trillian/emoticon.png" # Header image
+    cp ri.files.select{|f| f.aliases.include? 'win'}.first.to_s, "build/maltafixe-trillian/preview.png" # Header image
+    preview = Magick::Image.read("build/maltafixe-trillian/preview.png")
+    preview[0].write("build/maltafixe-trillian/preview.bmp")
+    rm "build/maltafixe-trillian/preview.png"
     
-    Pathname.new('./build/trollicons-trillian/main.xml').open('w'){|io| io << markup}
-    Pathname.new('./build/trollicons-trillian/desc.txt').open('w'){|io| io << string}
+    Pathname.new('./build/maltafixe-trillian/main.xml').open('w'){|io| io << markup}
+    Pathname.new('./build/maltafixe-trillian/desc.txt').open('w'){|io| io << string}
   end
 
   desc "Builds a Chrome extension/user-script"
@@ -345,33 +345,33 @@ namespace :build do
     require "json"
     
   	puts "\nBuilding Chrome extension".bold
-    next unless file_exists './extension/lib/trollicons.pem'
+    next unless file_exists './extension/lib/maltafixe.pem'
     
-    # open extension/trollicons/manifest.json
+    # open extension/maltafixe/manifest.json
     # add 0.1 to the version number
-    manifestFile = File.new("extension/trollicons/manifest.json", "r")
+    manifestFile = File.new("extension/maltafixe/manifest.json", "r")
     manifest = JSON.parse(manifestFile.read)
     manifest['version'] = String((Float(manifest['version']) + 0.1).round(1))
     manifestFile.close()
 
-    manifestFile = File.new("extension/trollicons/manifest.json", "w")
+    manifestFile = File.new("extension/maltafixe/manifest.json", "w")
     manifestFile.write(JSON.pretty_generate(manifest))
     manifestFile.close()
 
-  	cmd = "cp -r Icons/ extension/trollicons/img"
-  	cmd += " && \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --pack-extension=extension/trollicons/ --pack-extension-key=extension/lib/trollicons.pem"
+  	cmd = "cp -r Icons/ extension/maltafixe/img"
+  	cmd += " && \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --pack-extension=extension/maltafixe/ --pack-extension-key=extension/lib/maltafixe.pem"
   	system cmd
   
 	  puts "\nBuilding extension Zip file for upload to Chrome website".bold
-  	cmd = "cd extension/trollicons"
-  	cmd += "&& zip -r ../../build/trollicons-chrome.zip *"
+  	cmd = "cd extension/maltafixe"
+  	cmd += "&& zip -r ../../build/maltafixe-chrome.zip *"
   	cmd += "&& cd -"
   	system cmd
 
   	puts "\nCleaning up...".bold
   	
-  	cmd = "mv extension/trollicons.crx build/"
-  	cmd += " && rm -rf extension/trollicons/img"
+  	cmd = "mv extension/maltafixe.crx build/"
+  	cmd += " && rm -rf extension/maltafixe/img"
   	system cmd
   end
 end
@@ -382,7 +382,7 @@ task :tweet do
   require "twitter"
   require "json"
 
-  auth = JSON.parse(File.new("trolliconsAuth.ignore", "r").read)
+  auth = JSON.parse(File.new("maltafixeAuth.ignore", "r").read)
   print "Type the message: "
   STDIN.gets
   Twitter.configure do |config|
@@ -402,7 +402,7 @@ task :deploy => [:clean, 'build:all', :dist] do
 
   login = `git config github.user`.chomp  # your login for github
   token = `git config github.token`.chomp # your token for github
-  repos = 'sagargp/trollicons'            # your repos name (like 'taberareloo')
+  repos = 'sagargp/maltafixe'            # your repos name (like 'taberareloo')
   gh = Net::GitHub::Upload.new(
     :login => login,
     :token => token
@@ -489,9 +489,9 @@ class RIcons
     end
     puts "Processing #{files.count} files.".green
     
-    # Process the Trollicons version file
-    v = files.index(Pathname.new("Icons/Trollicons-trollicons.png"))
-    files[v].name = " Trollicons (#{files.count} icons) (build date: #{Time.now.month}-#{Time.now.day}-#{Time.now.year})"   
+    # Process the maltafixe version file
+    v = files.index(Pathname.new("Icons/User-user.png"))
+    files[v].name = " maltafixe (#{files.count} icons) (build date: #{Time.now.month}-#{Time.now.day}-#{Time.now.year})"   
     
     files
   end
